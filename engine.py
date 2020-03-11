@@ -139,7 +139,7 @@ class Board(Sprite):
 
             self.x_offset = (w - h) / 2
             if self.x_offset < 0:
-                # Y direction longer than Y, pad top and use width for sizing
+                # Y direction longer than X, pad top and use width for sizing
                 self.x_u = w / self.gridsize[0]
                 self.y_u = w / self.gridsize[1]
                 self.x_offset = 0
