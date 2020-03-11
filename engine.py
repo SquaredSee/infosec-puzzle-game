@@ -57,60 +57,59 @@ class Entity(Sprite):
         # Radius attribute for collision detection, circle centered on pos
         # self.radius = size[0] / 2
 
+        self.size = size
+        self.pos = pos
+        self.gridpos = gridpos
+        self.color = color
+        self.resize = False
+
         self.image = Surface(size).convert()
         self.image.set_colorkey(COLOR.TRANSPARENT)  # set black as transparency color
         self.image.fill(color)
 
         self.rect = self.image.get_rect(topleft=pos)
 
-        self.position = gridpos
-        self.color = color
-
         Entity.group.add(self)
 
     def update(self):
         """Called every tick to update the state of the entity"""
-
-        pass
-
-    # def move(self, pos=Vector(0, 0)):
-    #     """Moves the position to the Vector2 given"""
-
-    #     self.position = pos
-    #     # Set the center of the rect to the position
-    #     self.rect.topleft = self.pos
-
-
+        if self.resize:
+            self.resize = False
+            self.image = Surface(self.size).convert()
+            self.image.fill(self.color)
+            self.rect = self.image.get_rect(topleft=self.pos)
 
 
 class Board(Sprite):
     """Game board that handles drawing entities and tiles. Base class for all levels."""
 
-    def __init__(self, size=(10,10), color=COLOR.GRAY):
+    def __init__(self, gridsize=(20,20), color=COLOR.GRAY):
         Sprite.__init__(self)
 
         # Radius attribute for collision detection, circle centered on pos
         # self.radius = size[0] / 2
 
         self.size = SCREEN_SIZE
+        self.gridsize = gridsize
+        self.color = color
+        self.resize = False
 
         self.image = Surface(SCREEN_SIZE).convert()
         # self.image.set_colorkey(COLOR.TRANSPARENT)  # set black as transparency color
         self.image.fill(color)
 
-        self.gridsize = size
-        self.x_u = SCREEN_HEIGHT / size[0]
-        self.y_u = SCREEN_HEIGHT / size[1]
+        self.x_u = SCREEN_HEIGHT / gridsize[0]
+        self.y_u = SCREEN_HEIGHT / gridsize[1]
         self.x_offset = 0
         self.y_offset = 0
 
-        self.color = color
-
         # Generate game grid
         self.grid = []
-        for _ in range(size[0]):
-            col = [None for _ in range(size[1])]
+        for _ in range(gridsize[0]):
+            col = [None for _ in range(gridsize[1])]
             self.grid.append(col)
+
+        # Add entity for testing
         self.grid[4][4] = Entity(
             self.calc_size((1, 1)),
             self.calc_pos(4, 4),
@@ -132,8 +131,10 @@ class Board(Sprite):
     def update(self):
         """Called every tick to update the state of the board"""
 
-        w, h = display.get_surface().get_size()
-        if w != self.size[0] or h != self.size[1]:
+        if self.resize:
+            self.resize = False
+            w, h = display.get_surface().get_size()
+            self.size = (w, h)
             self.x_offset = (w - h) / 2
             if self.x_offset < 0:
                 self.x_u = w / self.gridsize[0]
@@ -151,11 +152,6 @@ class Board(Sprite):
             for x, col in enumerate(self.grid):
                 for y in range(len(col)):
                     if col[y]:
-                        c = col[y].color
-                        col[y].kill()
-                        col[y] = Entity(
-                            self.calc_size((1, 1)),
-                            self.calc_pos(x, y),
-                            (x, y),
-                            c
-                        )
+                        col[y].resize = True
+                        col[y].pos = self.calc_pos(x, y)
+                        col[y].size = self.calc_size((1, 1))

@@ -23,8 +23,7 @@ def main():
                 raise SystemExit('Thanks for playing!')
             if event.type == VIDEORESIZE:
                 screen = display.set_mode((event.w, event.h), RESIZABLE)
-
-
+                board.resize = True
 
         # Update all entities and draw them
         screen.blit(board.image, (0, 0))
