@@ -13,7 +13,7 @@ def main():
 
     clock = Clock()
 
-    screen = display.set_mode(State['windowsize'], RESIZABLE)
+    screen = display.set_mode(State.windowsize, RESIZABLE)
     display.set_caption('HACK!')
 
     board = Board()
@@ -26,7 +26,7 @@ def main():
                 # Reset screen surface and set resize flag on board
                 size = (event.w, event.h)
                 screen = display.set_mode(size, RESIZABLE)
-                State['windowsize'] = size
+                State.windowsize = size
                 board.resize = True
 
         # Update all entities and draw them

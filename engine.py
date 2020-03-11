@@ -8,20 +8,13 @@ from pygame import Surface, display
 from pygame.color import Color
 from pygame.sprite import Sprite, Group as SpriteGroup
 
+# Target FPS for clock
 FPS = 60
+
+# Initial screen size constants
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 600
 SCREEN_SIZE = (SCREEN_WIDTH, SCREEN_HEIGHT)
-
-# Game state, maintains progress between teleports and can be saved
-State = {
-    'windowsize': SCREEN_SIZE,
-    'teleport': None,  # value specifying stage to teleport to, or None
-    'key1': False,
-    'key2': False,
-    'key3': False,
-    'key4': False,
-}
 
 try:
     # PyInstaller creates a temp folder and stores path in _MEIPASS
@@ -34,24 +27,34 @@ FONT_SIZE = 36
 
 # Use a SimpleNamespace to allow for COLOR.NAME accessing
 COLOR = SimpleNamespace(
-    NAVY=Color('#001f3f'),
-    BLUE=Color('#0074D9'),
-    AQUA=Color('#7FDBFF'),
-    TEAL=Color('#39CCCC'),
-    OLIVE=Color('#3D9970'),
-    GREEN=Color('#2ECC40'),
-    LIME=Color('#01FF70'),
-    YELLOW=Color('#FFDC00'),
-    ORANGE=Color('#FF851B'),
-    RED=Color('#FF4136'),
-    MAROON=Color('#85144b'),
-    FUCHSIA=Color('#F012BE'),
-    PURPLE=Color('#B10DC9'),
-    BLACK=Color('#111111'),
-    GRAY=Color('#AAAAAA'),
-    SILVER=Color('#DDDDDD'),
-    WHITE=Color('#FFFFFF'),
-    TRANSPARENT=Color('#000000')
+    NAVY = Color('#001f3f'),
+    BLUE = Color('#0074D9'),
+    AQUA = Color('#7FDBFF'),
+    TEAL = Color('#39CCCC'),
+    OLIVE = Color('#3D9970'),
+    GREEN = Color('#2ECC40'),
+    LIME = Color('#01FF70'),
+    YELLOW = Color('#FFDC00'),
+    ORANGE = Color('#FF851B'),
+    RED = Color('#FF4136'),
+    MAROON = Color('#85144b'),
+    FUCHSIA = Color('#F012BE'),
+    PURPLE = Color('#B10DC9'),
+    BLACK = Color('#111111'),
+    GRAY = Color('#AAAAAA'),
+    SILVER = Color('#DDDDDD'),
+    WHITE = Color('#FFFFFF'),
+    TRANSPARENT = Color('#000000')
+)
+
+# Game state, maintains progress between teleports and can be saved
+State = SimpleNamespace(
+    windowsize = SCREEN_SIZE,
+    teleport = None,  # value specifying stage to teleport to, or None
+    key1 = False,
+    key2 = False,
+    key3 = False,
+    key4 = False
 )
 
 
@@ -102,7 +105,7 @@ class Board(Sprite):
         # self.radius = size[0] / 2
 
         # self.state = state
-        self.size = State['windowsize']
+        self.size = State.windowsize
         self.gridsize = gridsize
         self.color = color
         self.resize = False
@@ -147,7 +150,7 @@ class Board(Sprite):
         if self.resize:
             self.resize = False
 
-            w, h = State['windowsize']
+            w, h = State.windowsize
             self.size = (w, h)
 
             self.x_offset = (w - h) / 2
