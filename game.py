@@ -1,3 +1,5 @@
+"""game.py: Main game loop and event handling"""
+
 from pygame import Surface, display, init
 from pygame.event import get as get_events
 from pygame.locals import RESIZABLE, VIDEORESIZE, QUIT, K_RETURN
