@@ -134,7 +134,8 @@ class Board(Sprite):
         if self.resize:
             self.resize = False
 
-            w, h = display.get_surface().get_size()
+            # w, h = display.get_window_size()
+            w, h = display.get_surface().get_size()  # FIXME when PyPI has pygame>=2.0.0
             self.size = (w, h)
 
             self.x_offset = (w - h) / 2
