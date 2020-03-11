@@ -126,11 +126,29 @@ class Board(Sprite):
             self.grid.append(col)
 
         # Add entity for testing
-        self.grid[4][4] = Entity(
+        self.grid[9][9] = Entity(
             self.calc_size((1, 1)),
-            self.calc_pos(4, 4),
-            (4, 4),
+            self.calc_pos(9, 9),
+            (9, 9),
             COLOR.RED
+        )
+        self.grid[10][10] = Entity(
+            self.calc_size((1, 1)),
+            self.calc_pos(10, 10),
+            (10, 10),
+            COLOR.BLUE
+        )
+        self.grid[19][19] = Entity(
+            self.calc_size((1, 1)),
+            self.calc_pos(19, 19),
+            (19, 19),
+            COLOR.GREEN
+        )
+        self.grid[0][0] = Entity(
+            self.calc_size((1, 1)),
+            self.calc_pos(0, 0),
+            (0, 0),
+            COLOR.YELLOW
         )
 
     def calc_pos(self, x, y):
