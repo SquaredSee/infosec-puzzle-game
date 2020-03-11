@@ -22,6 +22,7 @@ def main():
             if event.type == QUIT:
                 raise SystemExit('Thanks for playing!')
             if event.type == VIDEORESIZE:
+                # Reset screen surface and set resize flag on board
                 screen = display.set_mode((event.w, event.h), RESIZABLE)
                 board.resize = True
 

@@ -133,15 +133,19 @@ class Board(Sprite):
 
         if self.resize:
             self.resize = False
+
             w, h = display.get_surface().get_size()
             self.size = (w, h)
+
             self.x_offset = (w - h) / 2
             if self.x_offset < 0:
+                # Y direction longer than Y, pad top and use width for sizing
                 self.x_u = w / self.gridsize[0]
                 self.y_u = w / self.gridsize[1]
                 self.x_offset = 0
                 self.y_offset = (h - w) / 2
             else:
+                # X direction longer than Y, pad left and use height for sizing
                 self.x_u = h / self.gridsize[0]
                 self.y_u = h / self.gridsize[1]
                 self.y_offset = 0
@@ -149,6 +153,7 @@ class Board(Sprite):
             self.image = Surface((w, h)).convert()
             self.image.fill(COLOR.GRAY)
 
+            # Re-calculate all tile sizes and positions
             for x, col in enumerate(self.grid):
                 for y in range(len(col)):
                     if col[y]:
