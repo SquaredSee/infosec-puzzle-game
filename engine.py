@@ -83,7 +83,7 @@ class Entity(Sprite):
 class Board(Sprite):
     """Game board that handles drawing entities and tiles. Base class for all levels."""
 
-    def __init__(self, gridsize=(20,20), color=COLOR.GRAY):
+    def __init__(self, gridsize=20, color=COLOR.GRAY):
         Sprite.__init__(self)
 
         # Radius attribute for collision detection, circle centered on pos
@@ -98,15 +98,15 @@ class Board(Sprite):
         # self.image.set_colorkey(COLOR.TRANSPARENT)  # set black as transparency color
         self.image.fill(color)
 
-        self.x_u = SCREEN_HEIGHT / gridsize[0]
-        self.y_u = SCREEN_HEIGHT / gridsize[1]
+        self.x_u = SCREEN_HEIGHT / gridsize
+        self.y_u = SCREEN_HEIGHT / gridsize
         self.x_offset = 0
         self.y_offset = 0
 
         # Generate game grid
         self.grid = []
-        for _ in range(gridsize[0]):
-            col = [None for _ in range(gridsize[1])]
+        for _ in range(gridsize):
+            col = [None for _ in range(gridsize)]
             self.grid.append(col)
 
         # Add entity for testing
@@ -125,8 +125,8 @@ class Board(Sprite):
 
     def calc_size(self, size):
         """Calculates entity and tile size based on the grid size and the given coordinates"""
-        size = (self.x_u * size[0], self.y_u * size[1])
-        return size
+        s = (self.x_u * size[0], self.y_u * size[1])
+        return s
 
     def update(self):
         """Called every tick to update the state of the board"""
@@ -140,14 +140,14 @@ class Board(Sprite):
             self.x_offset = (w - h) / 2
             if self.x_offset < 0:
                 # Y direction longer than X, pad top and use width for sizing
-                self.x_u = w / self.gridsize[0]
-                self.y_u = w / self.gridsize[1]
+                self.x_u = w / self.gridsize
+                self.y_u = w / self.gridsize
                 self.x_offset = 0
                 self.y_offset = (h - w) / 2
             else:
                 # X direction longer than Y, pad left and use height for sizing
-                self.x_u = h / self.gridsize[0]
-                self.y_u = h / self.gridsize[1]
+                self.x_u = h / self.gridsize
+                self.y_u = h / self.gridsize
                 self.y_offset = 0
 
             self.image = Surface((w, h)).convert()
