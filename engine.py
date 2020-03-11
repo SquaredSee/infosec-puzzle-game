@@ -13,6 +13,16 @@ SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 600
 SCREEN_SIZE = (SCREEN_WIDTH, SCREEN_HEIGHT)
 
+# Game state, maintains progress between teleports and can be saved
+State = {
+    'windowsize': SCREEN_SIZE,
+    'teleport': None,  # value specifying stage to teleport to, or None
+    'key1': False,
+    'key2': False,
+    'key3': False,
+    'key4': False,
+}
+
 try:
     # PyInstaller creates a temp folder and stores path in _MEIPASS
     DATA_PATH = join(sys._MEIPASS, 'data')
@@ -81,7 +91,9 @@ class Entity(Sprite):
 
 
 class Board(Sprite):
-    """Game board that handles drawing entities and tiles. Base class for all levels."""
+    """
+    Game board that handles drawing entities and tiles. Base class for all levels.
+    """
 
     def __init__(self, gridsize=20, color=COLOR.GRAY):
         Sprite.__init__(self)
@@ -89,17 +101,18 @@ class Board(Sprite):
         # Radius attribute for collision detection, circle centered on pos
         # self.radius = size[0] / 2
 
-        self.size = SCREEN_SIZE
+        # self.state = state
+        self.size = State['windowsize']
         self.gridsize = gridsize
         self.color = color
         self.resize = False
 
-        self.image = Surface(SCREEN_SIZE).convert()
+        self.image = Surface(self.size).convert()
         # self.image.set_colorkey(COLOR.TRANSPARENT)  # set black as transparency color
         self.image.fill(color)
 
-        self.x_u = SCREEN_HEIGHT / gridsize
-        self.y_u = SCREEN_HEIGHT / gridsize
+        self.x_u = self.size[0] / gridsize
+        self.y_u = self.size[1] / gridsize
         self.x_offset = 0
         self.y_offset = 0
 
@@ -134,8 +147,7 @@ class Board(Sprite):
         if self.resize:
             self.resize = False
 
-            # w, h = display.get_window_size()
-            w, h = display.get_surface().get_size()  # FIXME when PyPI has pygame>=2.0.0
+            w, h = State['windowsize']
             self.size = (w, h)
 
             self.x_offset = (w - h) / 2

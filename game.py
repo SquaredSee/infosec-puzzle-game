@@ -5,8 +5,7 @@ from pygame.event import get as get_events
 from pygame.locals import RESIZABLE, VIDEORESIZE, QUIT, K_RETURN
 from pygame.time import Clock
 
-from engine import Board, Entity, COLOR, FPS, FONT_PATH, FONT_SIZE,\
-    SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_SIZE
+from engine import Board, Entity, State, COLOR, FPS, FONT_PATH, FONT_SIZE
 
 
 def main():
@@ -14,7 +13,7 @@ def main():
 
     clock = Clock()
 
-    screen = display.set_mode(SCREEN_SIZE, RESIZABLE)
+    screen = display.set_mode(State['windowsize'], RESIZABLE)
     display.set_caption('HACK!')
 
     board = Board()
@@ -25,7 +24,9 @@ def main():
                 raise SystemExit('Thanks for playing!')
             if event.type == VIDEORESIZE:
                 # Reset screen surface and set resize flag on board
-                screen = display.set_mode((event.w, event.h), RESIZABLE)
+                size = (event.w, event.h)
+                screen = display.set_mode(size, RESIZABLE)
+                State['windowsize'] = size
                 board.resize = True
 
         # Update all entities and draw them
