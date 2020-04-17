@@ -10,10 +10,11 @@ from levels import LevelStart, LevelOne
 from player import Player
 
 
-def spawn_player():
+def spawn_player(board):
     if State.player:
         State.player.kill()
     State.player = Player()
+    board.place_player()
 
 
 def main():
@@ -25,6 +26,7 @@ def main():
     display.set_caption('HACK!')
 
     board = LevelStart()
+    spawn_player(board)
 
     while True:
         for event in get_events():
@@ -40,12 +42,11 @@ def main():
         if State.teleport:
             board.kill()
             State.level = State.teleport
-
             if State.teleport == Level.START:
                 board = LevelStart()
             elif State.teleport == Level.ONE:
                 board = LevelOne()
-
+            spawn_player(board)
             State.teleport = None
 
         # Update all entities and draw them

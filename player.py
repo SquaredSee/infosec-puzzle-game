@@ -1,18 +1,17 @@
 """player.py: Player and related Entities"""
 
-from pygame import K_UP, K_LEFT, K_RIGHT, K_z
 from pygame.draw import lines as draw_lines
 from pygame.key import get_pressed
 from pygame.math import Vector2 as Vector
 from pygame.sprite import Group as SpriteGroup
 
-from engine import Entity, State, COLOR, SCREEN_CENTER
+from engine import Entity, State, COLOR
 
 class Player(Entity):
-    """Entity for the player, controls all movement and shooting"""
+    """Entity for the player"""
 
     def __init__(self, gridpos=(0,0)):
-        Entity.__init__(self, (1,1), gridpos)
+        Entity.__init__(self, (1,1), gridpos, color=COLOR.RED)
 
         # Draws an arrow facing in the direction of angle to serve as the ship
         # size = self.image.get_size()
@@ -26,16 +25,5 @@ class Player(Entity):
     # def kill(self):
     #     Entity.kill(self)
 
-    def update(self):
-        keys = get_pressed()
-
-        if keys[K_LEFT]:
-            pass
-        if keys[K_RIGHT]:
-            pass
-        if keys[K_UP]:
-            pass
-        if keys[K_z]:
-            pass
-
-        Entity.update(self)
+    # def update(self):
+    #     Entity.update(self)

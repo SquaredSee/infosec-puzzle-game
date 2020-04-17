@@ -5,8 +5,9 @@ from enum import Enum
 from os.path import join
 from types import SimpleNamespace
 
-from pygame import Surface, display
+from pygame import Surface, display, K_UP, K_LEFT, K_RIGHT, K_DOWN, K_z
 from pygame.color import Color
+from pygame.key import get_pressed
 from pygame.sprite import Sprite, Group as SpriteGroup
 
 # Target FPS for clock
@@ -151,10 +152,10 @@ class Board(Sprite):
             gridpos=(19, 19),
             color=COLOR.GREEN
         )
-        self.grid[0][0] = Entity(
-            gridpos=(0, 0),
-            color=COLOR.YELLOW
-        )
+        # self.grid[0][0] = Entity(
+        #     gridpos=(0, 0),
+        #     color=COLOR.YELLOW
+        # )
 
     def calc_pos(self, x, y):
         """Calculates the screen position based on the grid size and the given coordinates"""
@@ -167,12 +168,14 @@ class Board(Sprite):
         s = (self.x_u * size[0], self.y_u * size[1])
         return s
 
-    def place_player(gridpos=(0,0)):
+    def place_player(self, gridpos=(0,0)):
+        """Places the player stored in the State on the correct space on the grid"""
         x,y = gridpos
         State.player.gridpos = gridpos
         self.grid[x][y] = State.player
 
     def resize_board(self):
+        """Re-calculate the sizes and positions of the entities on window resize"""
         if self.resize:
             self.resize = False
 
@@ -204,6 +207,21 @@ class Board(Sprite):
                         col[i].pos = self.calc_pos(x, y)
                         col[i].size = self.calc_size(col[i].gridsize)
 
+    def handle_inputs(self):
+        """Handles the inputs for controlling the game"""
+        keys = get_pressed()
+
+        if keys[K_LEFT]:
+            pass
+        if keys[K_RIGHT]:
+            pass
+        if keys[K_UP]:
+            pass
+        if keys[K_z]:
+            pass
+
     def update(self):
         """Called every tick to update the state of the board"""
+        Sprite.update(self)
         self.resize_board()
+        self.handle_inputs()
