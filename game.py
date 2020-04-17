@@ -5,7 +5,15 @@ from pygame.event import get as get_events
 from pygame.locals import RESIZABLE, VIDEORESIZE, QUIT, K_RETURN
 from pygame.time import Clock
 
-from engine import Board, Entity, State, COLOR, FPS, FONT_PATH, FONT_SIZE
+from engine import Entity, State, Level, COLOR, FPS, FONT_PATH, FONT_SIZE
+from levels import LevelStart, LevelOne
+from player import Player
+
+
+def spawn_player():
+    if State.player:
+        State.player.kill()
+    State.player = Player()
 
 
 def main():
@@ -16,7 +24,7 @@ def main():
     screen = display.set_mode(State.windowsize, RESIZABLE)
     display.set_caption('HACK!')
 
-    board = Board()
+    board = LevelStart()
 
     while True:
         for event in get_events():
@@ -28,6 +36,17 @@ def main():
                 screen = display.set_mode(size, RESIZABLE)
                 State.windowsize = size
                 board.resize = True
+
+        if State.teleport:
+            board.kill()
+            State.level = State.teleport
+
+            if State.teleport == Level.START:
+                board = LevelStart()
+            elif State.teleport == Level.ONE:
+                board = LevelOne()
+
+            State.teleport = None
 
         # Update all entities and draw them
         screen.blit(board.image, (0, 0))

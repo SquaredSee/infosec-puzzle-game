@@ -1,6 +1,7 @@
 """engine.py: Basic game primitives and global constants"""
 
 import sys
+from enum import Enum
 from os.path import join
 from types import SimpleNamespace
 
@@ -47,10 +48,20 @@ COLOR = SimpleNamespace(
     TRANSPARENT = Color('#000000')
 )
 
+class Level(Enum):
+    START = 0
+    ONE = 1
+    TWO = 2
+    THREE = 3
+    FOUR = 4
+    END = 5
+
 # Game state, maintains progress between teleports and can be saved
 State = SimpleNamespace(
     windowsize = SCREEN_SIZE,
+    level = Level.START,
     teleport = None,  # value specifying stage to teleport to, or None
+    player = None,
     key1 = False,
     key2 = False,
     key3 = False,
@@ -64,14 +75,16 @@ class Entity(Sprite):
     # Keep a group of all entities for the purpose of updating and drawing
     group = SpriteGroup()
 
-    def __init__(self, size=(1, 1), pos=(0, 0), gridpos=(0,0), color=COLOR.TRANSPARENT):
+    def __init__(self, size=(1, 1), gridpos=(0,0), color=COLOR.TRANSPARENT):
         Sprite.__init__(self)
 
         # Radius attribute for collision detection, circle centered on pos
         # self.radius = size[0] / 2
 
+        self.gridsize = size
+
         self.size = size
-        self.pos = pos
+        self.pos = gridpos
         self.gridpos = gridpos
         self.color = color
         self.resize = False
@@ -80,7 +93,7 @@ class Entity(Sprite):
         self.image.set_colorkey(COLOR.TRANSPARENT)  # set black as transparency color
         self.image.fill(color)
 
-        self.rect = self.image.get_rect(topleft=pos)
+        self.rect = self.image.get_rect(topleft=self.pos)
 
         Entity.group.add(self)
 
@@ -108,7 +121,7 @@ class Board(Sprite):
         self.size = State.windowsize
         self.gridsize = gridsize
         self.color = color
-        self.resize = False
+        self.resize = True
 
         self.image = Surface(self.size).convert()
         # self.image.set_colorkey(COLOR.TRANSPARENT)  # set black as transparency color
@@ -127,28 +140,20 @@ class Board(Sprite):
 
         # Add entity for testing
         self.grid[9][9] = Entity(
-            self.calc_size((1, 1)),
-            self.calc_pos(9, 9),
-            (9, 9),
-            COLOR.RED
+            gridpos=(9, 9),
+            color=COLOR.RED
         )
         self.grid[10][10] = Entity(
-            self.calc_size((1, 1)),
-            self.calc_pos(10, 10),
-            (10, 10),
-            COLOR.BLUE
+            gridpos=(10, 10),
+            color=COLOR.BLUE
         )
         self.grid[19][19] = Entity(
-            self.calc_size((1, 1)),
-            self.calc_pos(19, 19),
-            (19, 19),
-            COLOR.GREEN
+            gridpos=(19, 19),
+            color=COLOR.GREEN
         )
         self.grid[0][0] = Entity(
-            self.calc_size((1, 1)),
-            self.calc_pos(0, 0),
-            (0, 0),
-            COLOR.YELLOW
+            gridpos=(0, 0),
+            color=COLOR.YELLOW
         )
 
     def calc_pos(self, x, y):
@@ -162,9 +167,12 @@ class Board(Sprite):
         s = (self.x_u * size[0], self.y_u * size[1])
         return s
 
-    def update(self):
-        """Called every tick to update the state of the board"""
+    def place_player(gridpos=(0,0)):
+        x,y = gridpos
+        State.player.gridpos = gridpos
+        self.grid[x][y] = State.player
 
+    def resize_board(self):
         if self.resize:
             self.resize = False
 
@@ -188,9 +196,14 @@ class Board(Sprite):
             self.image.fill(COLOR.GRAY)
 
             # Re-calculate all tile sizes and positions
-            for x, col in enumerate(self.grid):
-                for y in range(len(col)):
-                    if col[y]:
-                        col[y].resize = True
-                        col[y].pos = self.calc_pos(x, y)
-                        col[y].size = self.calc_size((1, 1))
+            for col in self.grid:
+                for i in range(len(col)):
+                    if col[i]:
+                        x, y = col[i].gridpos
+                        col[i].resize = True
+                        col[i].pos = self.calc_pos(x, y)
+                        col[i].size = self.calc_size(col[i].gridsize)
+
+    def update(self):
+        """Called every tick to update the state of the board"""
+        self.resize_board()
