@@ -13,7 +13,7 @@ from player import Player
 def spawn_player(board):
     if State.player:
         State.player.kill()
-    State.player = Player()
+    State.player = Player(board.spawncoords)
     board.spawn_player()
 
 
@@ -38,8 +38,9 @@ def main():
                 State.windowsize = size
                 board.resize = True
             elif event.type == KEYDOWN:
-                if event.key == K_RETURN and type(board) == SplashScreen:
-                    State.teleport = Level.START
+                if type(board) == SplashScreen:
+                    if event.key == K_RETURN :
+                        State.teleport = Level.START
                     continue
 
                 x,y = State.player.gridpos
