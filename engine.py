@@ -109,17 +109,20 @@ class Entity(Sprite):
 
 
 class Wall(Entity):
+    """Basic entity used to restrict player movement"""
     def __init__(self, gridpos=(0,0), color=COLOR.BLACK):
         Entity.__init__(self, gridpos=gridpos, color=color)
 
 
 class Teleporter(Entity):
+    """Transports the player to a new level"""
     def __init__(self, gridpos=(0,0), color=COLOR.BLUE, destination=Level.START):
         Entity.__init__(self, gridpos=gridpos, color=color)
         self.destination = destination
 
 
 class Key(Entity):
+    """Unlocks specific doors in the game"""
     def __init__(self, val=0, gridpos=(0,0), color=COLOR.YELLOW):
         Entity.__init__(self, gridpos=gridpos, color=color)
 
