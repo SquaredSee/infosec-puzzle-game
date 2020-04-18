@@ -146,6 +146,8 @@ class Board(Sprite):
         self.x_offset = 0
         self.y_offset = 0
 
+        self.spawncoords = (0,0)
+
         # Generate game grid
         self.grid = []
         for _ in range(gridsize):
@@ -182,6 +184,9 @@ class Board(Sprite):
         State.player.pos = self.calc_pos(gridpos)
         self.grid[old_x][old_y] = None
         self.grid[x][y] = State.player
+
+    def spawn_player(self):
+        self.place_player(self.spawncoords)
 
     def resize_board(self):
         """Re-calculate the sizes and positions of the entities on window resize"""

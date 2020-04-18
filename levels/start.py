@@ -1,6 +1,26 @@
-"""start.py: Starting level, contains teleports to all other levels."""
+"""start.py: Starting level,contains teleports to all other levels."""
 
-from engine import COLOR, Level, Board, State, Wall, Teleporter
+from engine import Board, generate_grid
+
+BOARD = [
+    ['','','','','','','','w','w','w','','','','','','',''],
+    ['','','','','','','','w','','w','','','','','','',''],
+    ['','','','','','','','w','','w','','','','','','',''],
+    ['','','','','','','','w','','w','','','','','','',''],
+    ['','','','','','','','w','','w','','','','','','',''],
+    ['','','','','','','w','w','','w','w','','','','','',''],
+    ['','','','','','w','w','','','','w','w','','','','',''],
+    ['','','','','','w','','','','','','w','','','','',''],
+    ['','','','','w','w','','','','','','w','w','','','',''],
+    ['','','','','w','t3','','','','','','t4','w','','','',''],
+    ['','','','','w','w','','','','','','w','w','','','',''],
+    ['','','','','w','t1','','','','','','t2','w','','','',''],
+    ['','','','','w','w','','','','','','w','w','','','',''],
+    ['','','','','','w','','','','','','w','','','','',''],
+    ['','','','','','w','w','','','','w','w','','','','',''],
+    ['','','','','','','w','w','p','w','w','','','','','',''],
+    ['','','','','','','','w','w','w','','','','','','','']
+]
 
 
 class LevelStart(Board):
@@ -10,24 +30,8 @@ class LevelStart(Board):
     """
 
     def __init__(self):
-        Board.__init__(self)
+        Board.__init__(self, gridsize=17)
 
-        self.grid[3][3] = Teleporter(
-            gridpos=(3,3),
-            color=COLOR.TEAL,
-            destination=Level.ONE
-        )
+        self.spawncoords = (8, 15)
 
-        # Add entity for testing
-        self.grid[9][9] = Wall(
-            gridpos=(9, 9),
-            color=COLOR.RED
-        )
-        self.grid[10][10] = Wall(
-            gridpos=(10, 10),
-            color=COLOR.BLUE
-        )
-        self.grid[19][19] = Wall(
-            gridpos=(19, 19),
-            color=COLOR.GREEN
-        )
+        self.grid = generate_grid(BOARD)

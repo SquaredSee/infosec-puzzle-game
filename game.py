@@ -14,7 +14,7 @@ def spawn_player(board):
     if State.player:
         State.player.kill()
     State.player = Player()
-    board.place_player()
+    board.spawn_player()
 
 
 def main():
