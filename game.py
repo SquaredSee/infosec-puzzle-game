@@ -6,7 +6,7 @@ from pygame.locals import RESIZABLE, VIDEORESIZE, QUIT, KEYDOWN
 from pygame.time import Clock
 
 from engine import Entity, State, Level, COLOR, FPS
-from levels import SplashScreen, LevelStart, LevelOne
+from levels import SplashScreen, LevelStart, LevelOne, LevelTwo, LevelThree, LevelFour
 from player import Player
 
 
@@ -61,6 +61,12 @@ def main():
                 board = LevelStart()
             elif State.teleport == Level.ONE:
                 board = LevelOne()
+            elif State.teleport == Level.TWO:
+                board = LevelTwo()
+            elif State.teleport == Level.THREE:
+                board = LevelThree()
+            elif State.teleport == Level.FOUR:
+                board = LevelFour()
             spawn_player(board)
             State.teleport = None
 
