@@ -1,8 +1,8 @@
 """game.py: Main game loop and event handling"""
 
-from pygame import Surface, display, init
+from pygame import Surface, display, init, K_UP, K_LEFT, K_RIGHT, K_DOWN, K_z
 from pygame.event import get as get_events
-from pygame.locals import RESIZABLE, VIDEORESIZE, QUIT, K_RETURN
+from pygame.locals import RESIZABLE, VIDEORESIZE, QUIT, K_RETURN, KEYDOWN
 from pygame.time import Clock
 
 from engine import Entity, State, Level, COLOR, FPS, FONT_PATH, FONT_SIZE
@@ -32,12 +32,23 @@ def main():
         for event in get_events():
             if event.type == QUIT:
                 raise SystemExit('Thanks for playing!')
-            if event.type == VIDEORESIZE:
+            elif event.type == VIDEORESIZE:
                 # Reset screen surface and set resize flag on board
                 size = (event.w, event.h)
                 screen = display.set_mode(size, RESIZABLE)
                 State.windowsize = size
                 board.resize = True
+            elif event.type == KEYDOWN:
+                x,y = State.player.gridpos
+                if event.key == K_UP:
+                    y -= 1
+                if event.key == K_DOWN:
+                    y += 1
+                if event.key == K_LEFT:
+                    x -= 1
+                if event.key == K_RIGHT:
+                    x += 1
+                board.place_player((x,y))
 
         if State.teleport:
             board.kill()

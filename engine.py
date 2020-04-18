@@ -5,7 +5,7 @@ from enum import Enum
 from os.path import join
 from types import SimpleNamespace
 
-from pygame import Surface, display, K_UP, K_LEFT, K_RIGHT, K_DOWN, K_z
+from pygame import Surface, display
 from pygame.color import Color
 from pygame.key import get_pressed
 from pygame.sprite import Sprite, Group as SpriteGroup
@@ -100,11 +100,18 @@ class Entity(Sprite):
 
     def update(self):
         """Called every tick to update the state of the entity"""
+        Sprite.update(self)
+        self.rect.topleft = self.pos
         if self.resize:
             self.resize = False
             self.image = Surface(self.size).convert()
             self.image.fill(self.color)
             self.rect = self.image.get_rect(topleft=self.pos)
+
+
+class Wall(Entity):
+    def __init__(self, gridpos=(0,0), color=COLOR.BLACK):
+        Entity.__init__(self, gridpos=gridpos, color=color)
 
 
 class Board(Sprite):
@@ -140,25 +147,22 @@ class Board(Sprite):
             self.grid.append(col)
 
         # Add entity for testing
-        self.grid[9][9] = Entity(
+        self.grid[9][9] = Wall(
             gridpos=(9, 9),
             color=COLOR.RED
         )
-        self.grid[10][10] = Entity(
+        self.grid[10][10] = Wall(
             gridpos=(10, 10),
             color=COLOR.BLUE
         )
-        self.grid[19][19] = Entity(
+        self.grid[19][19] = Wall(
             gridpos=(19, 19),
             color=COLOR.GREEN
         )
-        # self.grid[0][0] = Entity(
-        #     gridpos=(0, 0),
-        #     color=COLOR.YELLOW
-        # )
 
-    def calc_pos(self, x, y):
+    def calc_pos(self, gridpos):
         """Calculates the screen position based on the grid size and the given coordinates"""
+        x,y = gridpos
         x = self.x_offset + self.x_u * x
         y = self.y_offset + self.y_u * y
         return x, y
@@ -171,7 +175,16 @@ class Board(Sprite):
     def place_player(self, gridpos=(0,0)):
         """Places the player stored in the State on the correct space on the grid"""
         x,y = gridpos
+        if x < 0 or x > self.gridsize-1 or y < 0 or y > self.gridsize-1:
+            # Restrict movement to within the grid
+            return
+        if self.grid[x][y] and type(self.grid[x][y]) == Wall:
+            # Don't move if the square is a wall
+            return
+        old_x,old_y = State.player.gridpos
         State.player.gridpos = gridpos
+        State.player.pos = self.calc_pos(gridpos)
+        self.grid[old_x][old_y] = None
         self.grid[x][y] = State.player
 
     def resize_board(self):
@@ -202,26 +215,11 @@ class Board(Sprite):
             for col in self.grid:
                 for i in range(len(col)):
                     if col[i]:
-                        x, y = col[i].gridpos
                         col[i].resize = True
-                        col[i].pos = self.calc_pos(x, y)
+                        col[i].pos = self.calc_pos(col[i].gridpos)
                         col[i].size = self.calc_size(col[i].gridsize)
-
-    def handle_inputs(self):
-        """Handles the inputs for controlling the game"""
-        keys = get_pressed()
-
-        if keys[K_LEFT]:
-            pass
-        if keys[K_RIGHT]:
-            pass
-        if keys[K_UP]:
-            pass
-        if keys[K_z]:
-            pass
 
     def update(self):
         """Called every tick to update the state of the board"""
         Sprite.update(self)
         self.resize_board()
-        self.handle_inputs()
