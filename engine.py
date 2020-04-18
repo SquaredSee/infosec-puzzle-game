@@ -114,6 +114,12 @@ class Wall(Entity):
         Entity.__init__(self, gridpos=gridpos, color=color)
 
 
+class Teleporter(Entity):
+    def __init__(self, gridpos=(0,0), color=COLOR.BLUE, destination=Level.START):
+        Entity.__init__(self, gridpos=gridpos, color=color)
+        self.destination = destination
+
+
 class Board(Sprite):
     """
     Game board that handles drawing entities and tiles. Base class for all levels.
@@ -146,20 +152,6 @@ class Board(Sprite):
             col = [None for _ in range(gridsize)]
             self.grid.append(col)
 
-        # Add entity for testing
-        self.grid[9][9] = Wall(
-            gridpos=(9, 9),
-            color=COLOR.RED
-        )
-        self.grid[10][10] = Wall(
-            gridpos=(10, 10),
-            color=COLOR.BLUE
-        )
-        self.grid[19][19] = Wall(
-            gridpos=(19, 19),
-            color=COLOR.GREEN
-        )
-
     def calc_pos(self, gridpos):
         """Calculates the screen position based on the grid size and the given coordinates"""
         x,y = gridpos
@@ -178,9 +170,13 @@ class Board(Sprite):
         if x < 0 or x > self.gridsize-1 or y < 0 or y > self.gridsize-1:
             # Restrict movement to within the grid
             return
-        if self.grid[x][y] and type(self.grid[x][y]) == Wall:
-            # Don't move if the square is a wall
-            return
+        if self.grid[x][y]:
+            if type(self.grid[x][y]) == Wall:
+                # Don't move if the square is a wall
+                return
+            elif type(self.grid[x][y]) == Teleporter:
+                State.teleport = self.grid[x][y].destination
+                return
         old_x,old_y = State.player.gridpos
         State.player.gridpos = gridpos
         State.player.pos = self.calc_pos(gridpos)
@@ -223,3 +219,10 @@ class Board(Sprite):
         """Called every tick to update the state of the board"""
         Sprite.update(self)
         self.resize_board()
+
+    def kill(self):
+        for col in self.grid:
+            for i in range(len(col)):
+                if col[i]:
+                    col[i].kill()
+        Sprite.kill(self)
