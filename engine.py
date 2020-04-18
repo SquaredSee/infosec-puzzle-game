@@ -24,8 +24,8 @@ try:
 except Exception:
     DATA_PATH = join('.', 'data')
 
-FONT_PATH = join(DATA_PATH, 'PressStart2P-Regular.ttf')
-FONT_SIZE = 36
+# FONT_PATH = join(DATA_PATH, 'PressStart2P-Regular.ttf')
+# FONT_SIZE = 36
 
 SPLASH = join(DATA_PATH, 'hack.png')
 
@@ -127,7 +127,7 @@ class Key(Entity):
         self.val = val
 
     def pick_up(self):
-        print('test')
+        print('Door {} was unlocked!'.format(self.val+1))
         State.keys[self.val] = True
 
     def update(self):
@@ -213,7 +213,7 @@ class Board(Sprite):
             elif type(tile) == Teleporter:
                 State.teleport = tile.destination
                 return
-            elif type(tile) == Key:
+            elif type(tile) == Key and tile.visible:
                 tile.pick_up()
             elif type(tile) == Door and tile.locked:
                 # Door is locked, don't move

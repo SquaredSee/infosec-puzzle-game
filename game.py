@@ -1,11 +1,11 @@
 """game.py: Main game loop and event handling"""
 
-from pygame import Surface, display, init, K_UP, K_LEFT, K_RIGHT, K_DOWN, K_z
+from pygame import Surface, display, init, K_RETURN, K_UP, K_LEFT, K_RIGHT, K_DOWN, K_z
 from pygame.event import get as get_events
-from pygame.locals import RESIZABLE, VIDEORESIZE, QUIT, K_RETURN, KEYDOWN
+from pygame.locals import RESIZABLE, VIDEORESIZE, QUIT, KEYDOWN
 from pygame.time import Clock
 
-from engine import Entity, State, Level, COLOR, FPS, FONT_PATH, FONT_SIZE
+from engine import Entity, State, Level, COLOR, FPS
 from levels import SplashScreen, LevelStart, LevelOne
 from player import Player
 
