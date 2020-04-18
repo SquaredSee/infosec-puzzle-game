@@ -6,7 +6,7 @@ from pygame.locals import RESIZABLE, VIDEORESIZE, QUIT, K_RETURN, KEYDOWN
 from pygame.time import Clock
 
 from engine import Entity, State, Level, COLOR, FPS, FONT_PATH, FONT_SIZE
-from levels import LevelStart, LevelOne
+from levels import SplashScreen, LevelStart, LevelOne
 from player import Player
 
 
@@ -23,10 +23,9 @@ def main():
     clock = Clock()
 
     screen = display.set_mode(State.windowsize, RESIZABLE)
-    display.set_caption('HACK!')
+    display.set_caption('HACK_')
 
-    board = LevelStart()
-    spawn_player(board)
+    board = SplashScreen()
 
     while True:
         for event in get_events():
@@ -39,6 +38,10 @@ def main():
                 State.windowsize = size
                 board.resize = True
             elif event.type == KEYDOWN:
+                if event.key == K_RETURN and type(board) == SplashScreen:
+                    State.teleport = Level.START
+                    continue
+
                 x,y = State.player.gridpos
                 if event.key == K_UP:
                     y -= 1

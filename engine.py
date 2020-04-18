@@ -27,6 +27,8 @@ except Exception:
 FONT_PATH = join(DATA_PATH, 'PressStart2P-Regular.ttf')
 FONT_SIZE = 36
 
+SPLASH = join(DATA_PATH, 'hack.png')
+
 # Use a SimpleNamespace to allow for COLOR.NAME accessing
 COLOR = SimpleNamespace(
     NAVY = Color('#001f3f'),
