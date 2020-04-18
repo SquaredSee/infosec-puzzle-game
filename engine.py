@@ -226,3 +226,27 @@ class Board(Sprite):
                 if col[i]:
                     col[i].kill()
         Sprite.kill(self)
+
+
+def generate_grid(board, wall_color=COLOR.BLACK, tele_color=COLOR.TEAL):
+    l = len(board)
+    grid = [[None for _ in range(l)] for _ in range(l)]
+    for y in range(l):
+        for x in range(l):
+            val = board[y][x]
+            if val == '':
+                continue
+            elif val == 'w':
+                grid[x][y] = Wall(
+                    gridpos=(x,y),
+                    color=wall_color
+                )
+            elif 't' in val:
+                d = int(val[1])
+                dest = Level(d)
+                grid[x][y] = Teleporter(
+                    gridpos=(x,y),
+                    color=tele_color,
+                    destination=dest
+                )
+    return grid
