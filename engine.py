@@ -63,10 +63,7 @@ State = SimpleNamespace(
     level = Level.START,
     teleport = None,  # value specifying stage to teleport to, or None
     player = None,
-    key1 = False,
-    key2 = False,
-    key3 = False,
-    key4 = False
+    keys = [False, False, False, False]
 )
 
 
@@ -118,6 +115,41 @@ class Teleporter(Entity):
     def __init__(self, gridpos=(0,0), color=COLOR.BLUE, destination=Level.START):
         Entity.__init__(self, gridpos=gridpos, color=color)
         self.destination = destination
+
+
+class Key(Entity):
+    def __init__(self, val=0, gridpos=(0,0), color=COLOR.YELLOW):
+        Entity.__init__(self, gridpos=gridpos, color=color)
+
+        self.visible = True
+        self.val = val
+
+    def pick_up(self):
+        print('test')
+        State.keys[self.val] = True
+
+    def update(self):
+        Entity.update(self)
+        if State.keys[self.val] and self.visible:
+            self.visible = False
+            self.image.set_alpha(0)
+
+
+class Door(Entity):
+    def __init__(self, val=0, gridpos=(0,0), color=COLOR.BLACK):
+        Entity.__init__(self, gridpos=gridpos, color=color)
+
+        self.val = val
+        self.locked = True
+        self.visible = True
+
+    def update(self):
+        Entity.update(self)
+        if State.keys[self.val] and self.locked:
+            self.locked = False
+        elif not self.locked and self.visible:
+            self.image.set_alpha(0)
+            self.visible = False
 
 
 class Board(Sprite):
@@ -172,12 +204,18 @@ class Board(Sprite):
         if x < 0 or x > self.gridsize-1 or y < 0 or y > self.gridsize-1:
             # Restrict movement to within the grid
             return
-        if self.grid[x][y]:
-            if type(self.grid[x][y]) == Wall:
+        tile = self.grid[x][y]
+        if tile:
+            if type(tile) == Wall:
                 # Don't move if the square is a wall
                 return
-            elif type(self.grid[x][y]) == Teleporter:
-                State.teleport = self.grid[x][y].destination
+            elif type(tile) == Teleporter:
+                State.teleport = tile.destination
+                return
+            elif type(tile) == Key:
+                tile.pick_up()
+            elif type(tile) == Door and tile.locked:
+                # Door is locked, don't move
                 return
         old_x,old_y = State.player.gridpos
         State.player.gridpos = gridpos
@@ -233,7 +271,7 @@ class Board(Sprite):
         Sprite.kill(self)
 
 
-def generate_grid(board, wall_color=COLOR.BLACK, tele_color=COLOR.TEAL):
+def generate_grid(board, wall_color=COLOR.BLACK, tele_color=COLOR.TEAL, door_color=COLOR.GREEN, key_color=COLOR.YELLOW):
     l = len(board)
     grid = [[None for _ in range(l)] for _ in range(l)]
     for y in range(l):
@@ -253,5 +291,19 @@ def generate_grid(board, wall_color=COLOR.BLACK, tele_color=COLOR.TEAL):
                     gridpos=(x,y),
                     color=tele_color,
                     destination=dest
+                )
+            elif 'd' in val:
+                v = int(val[1])
+                grid[x][y] = Door(
+                    val=v-1,
+                    gridpos=(x,y),
+                    color=door_color
+                )
+            elif 'k' in val:
+                v = int(val[1])
+                grid[x][y] = Key(
+                    val=v-1,
+                    gridpos=(x,y),
+                    color=key_color
                 )
     return grid
