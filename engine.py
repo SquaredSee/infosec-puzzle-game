@@ -161,7 +161,7 @@ class Board(Sprite):
 
     def calc_size(self, size):
         """Calculates entity and tile size based on the grid size and the given coordinates"""
-        s = (self.x_u * size[0], self.y_u * size[1])
+        s = (self.x_u * size[0] + 1, self.y_u * size[1] + 1)
         return s
 
     def place_player(self, gridpos=(0,0)):
