@@ -65,7 +65,7 @@ State = SimpleNamespace(
     level = Level.START,
     teleport = None,  # value specifying stage to teleport to, or None
     player = None,
-    keys = [False, False, False, False]
+    keys = [False, False, False, False, False]
 )
 
 
@@ -75,7 +75,7 @@ class Entity(Sprite):
     # Keep a group of all entities for the purpose of updating and drawing
     group = SpriteGroup()
 
-    def __init__(self, size=(1, 1), gridpos=(0,0), color=COLOR.TRANSPARENT):
+    def __init__(self, size=(1, 1), gridpos=(0,0), color=COLOR.BLACK):
         Sprite.__init__(self)
 
         # Radius attribute for collision detection, circle centered on pos
@@ -172,7 +172,6 @@ class Board(Sprite):
         self.resize = True
 
         self.image = Surface(self.size).convert()
-        # self.image.set_colorkey(COLOR.TRANSPARENT)  # set black as transparency color
         self.image.fill(color)
 
         self.x_u = self.size[0] / gridsize
