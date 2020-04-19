@@ -65,9 +65,6 @@ class Entity(Sprite):
     def __init__(self, size=(1, 1), gridpos=(0,0), color=COLOR.BLACK):
         Sprite.__init__(self)
 
-        # Radius attribute for collision detection, circle centered on pos
-        # self.radius = size[0] / 2
-
         self.gridsize = size
 
         self.size = size
@@ -116,6 +113,7 @@ class Key(Entity):
         self.val = val
 
     def pick_up(self):
+        """Called when player steps on the Key's tile. Prints a message to the console and toggles the state"""
         print('Door {} was unlocked!'.format(self.val+1))
         State.keys[self.val] = True
 
@@ -151,7 +149,6 @@ class Board(Sprite):
     def __init__(self, gridsize=20, color=COLOR.GRAY):
         Sprite.__init__(self)
 
-        # self.state = state
         self.size = State.windowsize
         self.gridsize = gridsize
         self.color = color
@@ -259,6 +256,7 @@ class Board(Sprite):
 
 
 def generate_grid(board, wall_color=COLOR.BLACK, tele_color=COLOR.TEAL, door_color=COLOR.GREEN, key_color=COLOR.YELLOW):
+    """Generates the proper grid from the given board, with the specified colors."""
     l = len(board)
     grid = [[None for _ in range(l)] for _ in range(l)]
     for y in range(l):
