@@ -6,3 +6,4 @@ from .three import LevelThree
 from .four import LevelFour
 
 from .splash import SplashScreen
+from .end import EndScreen
