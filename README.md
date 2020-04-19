@@ -9,7 +9,7 @@ Hacking-themed puzzle game written for Infosec midterm
 * Down Arrow: Move Down
 
 ## Download Game
-[Link to download](https://github.com/SquaredSee/infosec-puzzle-game/releases/latest)
+[Link to download (no install required)](https://github.com/SquaredSee/infosec-puzzle-game/releases/latest)
 
 ## Source Code Installation
 ### For [pipenv](https://pipenv.readthedocs.io/):
