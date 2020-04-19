@@ -51,7 +51,7 @@ def main():
                     x,y = State.player.gridpos
                 except AttributeError:
                     # Player won't exist in some situations, so don't fail when getting gridpos
-                    pass
+                    continue
                 if event.key == K_UP:
                     y -= 1
                 if event.key == K_DOWN:
