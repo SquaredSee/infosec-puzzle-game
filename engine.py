@@ -32,24 +32,13 @@ END = join(DATA_PATH, 'end.png')
 
 # Use a SimpleNamespace to allow for COLOR.NAME accessing
 COLOR = SimpleNamespace(
-    NAVY = Color('#001f3f'),
-    BLUE = Color('#0074D9'),
-    AQUA = Color('#7FDBFF'),
     TEAL = Color('#39CCCC'),
-    OLIVE = Color('#3D9970'),
     GREEN = Color('#2ECC40'),
-    LIME = Color('#01FF70'),
     YELLOW = Color('#FFDC00'),
-    ORANGE = Color('#FF851B'),
     RED = Color('#FF4136'),
-    MAROON = Color('#85144b'),
-    FUCHSIA = Color('#F012BE'),
-    PURPLE = Color('#B10DC9'),
     BLACK = Color('#111111'),
     GRAY = Color('#AAAAAA'),
     SILVER = Color('#DDDDDD'),
-    WHITE = Color('#FFFFFF'),
-    TRANSPARENT = Color('#000000')
 )
 
 class Level(Enum):
@@ -91,7 +80,6 @@ class Entity(Sprite):
         self.resize = False
 
         self.image = Surface(size).convert()
-        self.image.set_colorkey(COLOR.TRANSPARENT)  # set black as transparency color
         self.image.fill(color)
 
         self.rect = self.image.get_rect(topleft=self.pos)
@@ -117,7 +105,7 @@ class Wall(Entity):
 
 class Teleporter(Entity):
     """Transports the player to a new level"""
-    def __init__(self, gridpos=(0,0), color=COLOR.BLUE, destination=Level.START):
+    def __init__(self, gridpos=(0,0), color=COLOR.TEAL, destination=Level.START):
         Entity.__init__(self, gridpos=gridpos, color=color)
         self.destination = destination
 
