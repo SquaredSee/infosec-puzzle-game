@@ -65,7 +65,7 @@ State = SimpleNamespace(
     level = Level.START,
     teleport = None,  # value specifying stage to teleport to, or None
     player = None,
-    keys = [False, False, False, False, False]
+    keys = [False, False, False, False, False, False]
 )
 
 
