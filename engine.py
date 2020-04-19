@@ -154,9 +154,6 @@ class Board(Sprite):
     def __init__(self, gridsize=20, color=COLOR.GRAY):
         Sprite.__init__(self)
 
-        # Radius attribute for collision detection, circle centered on pos
-        # self.radius = size[0] / 2
-
         # self.state = state
         self.size = State.windowsize
         self.gridsize = gridsize
