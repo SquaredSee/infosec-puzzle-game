@@ -1,5 +1,5 @@
 # infosec-puzzle-game
-Hacking-themed puzzle game written for Infosec midterm
+Hacking-themed puzzle game written for Security midterm
 
 
 ## Controls
