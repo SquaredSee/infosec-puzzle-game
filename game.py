@@ -6,13 +6,15 @@ from pygame.locals import RESIZABLE, VIDEORESIZE, QUIT, KEYDOWN
 from pygame.time import Clock
 
 from engine import Entity, State, Level, COLOR, FPS
-from levels import SplashScreen, LevelStart, LevelOne, LevelTwo, LevelThree, LevelFour
+from levels import SplashScreen, LevelStart, LevelOne, LevelTwo, LevelThree, LevelFour, EndScreen
 from player import Player
 
 
 def spawn_player(board):
     if State.player:
         State.player.kill()
+    if type(board) == EndScreen:
+        return
     State.player = Player(board.spawncoords)
     board.spawn_player()
 
@@ -38,9 +40,11 @@ def main():
                 State.windowsize = size
                 board.resize = True
             elif event.type == KEYDOWN:
-                if type(board) == SplashScreen:
-                    if event.key == K_RETURN :
+                if event.key == K_RETURN :
+                    if type(board) == SplashScreen:
                         State.teleport = Level.START
+                    elif type(board) == EndScreen:
+                        return
                     continue
 
                 x,y = State.player.gridpos
@@ -67,6 +71,8 @@ def main():
                 board = LevelThree()
             elif State.teleport == Level.FOUR:
                 board = LevelFour()
+            elif State.teleport == Level.END:
+                board = EndScreen()
             spawn_player(board)
             State.teleport = None
 

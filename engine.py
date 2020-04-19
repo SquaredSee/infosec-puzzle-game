@@ -28,6 +28,7 @@ except Exception:
 # FONT_SIZE = 36
 
 SPLASH = join(DATA_PATH, 'hack.png')
+END = join(DATA_PATH, 'end.png')
 
 # Use a SimpleNamespace to allow for COLOR.NAME accessing
 COLOR = SimpleNamespace(
