@@ -24,9 +24,6 @@ try:
 except Exception:
     DATA_PATH = join('.', 'data')
 
-# FONT_PATH = join(DATA_PATH, 'PressStart2P-Regular.ttf')
-# FONT_SIZE = 36
-
 SPLASH = join(DATA_PATH, 'hack.png')
 END = join(DATA_PATH, 'end.png')
 
