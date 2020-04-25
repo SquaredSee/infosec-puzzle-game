@@ -6,7 +6,8 @@ from pygame.locals import RESIZABLE, VIDEORESIZE, QUIT, KEYDOWN
 from pygame.time import Clock
 
 from engine import Entity, Player, State, Level, COLOR, FPS
-from levels import SplashScreen, LevelStart, LevelOne, LevelTwo, LevelThree, LevelFour, EndScreen
+from levels import (SplashScreen, LevelStart, LevelOne,
+    LevelTwo, LevelThree, LevelFour, EndScreen)
 
 
 def spawn_player(board):
@@ -49,7 +50,7 @@ def main():
                 try:
                     x,y = State.player.gridpos
                 except AttributeError:
-                    # Player won't exist in some situations, so don't fail when getting gridpos
+                    # Player won't exist in some situations, so don't fail here
                     continue
                 if event.key == K_UP:
                     y -= 1
