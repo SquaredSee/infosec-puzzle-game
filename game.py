@@ -65,6 +65,7 @@ def main():
                 board.place_player((x,y))
 
         if State.teleport:
+            # Transport the player to a different level
             board.kill()
             State.level = State.teleport
             if State.teleport == Level.START:
