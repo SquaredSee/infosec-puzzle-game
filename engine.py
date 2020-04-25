@@ -91,6 +91,13 @@ class Entity(Sprite):
             self.rect = self.image.get_rect(topleft=self.pos)
 
 
+class Player(Entity):
+    """Entity for the player"""
+
+    def __init__(self, gridpos=(0,0)):
+        Entity.__init__(self, (1,1), gridpos, color=COLOR.RED)
+
+
 class Wall(Entity):
     """Basic entity used to restrict player movement"""
     def __init__(self, gridpos=(0,0), color=COLOR.BLACK):

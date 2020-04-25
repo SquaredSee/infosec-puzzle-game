@@ -5,9 +5,8 @@ from pygame.event import get as get_events
 from pygame.locals import RESIZABLE, VIDEORESIZE, QUIT, KEYDOWN
 from pygame.time import Clock
 
-from engine import Entity, State, Level, COLOR, FPS
+from engine import Entity, Player, State, Level, COLOR, FPS
 from levels import SplashScreen, LevelStart, LevelOne, LevelTwo, LevelThree, LevelFour, EndScreen
-from player import Player
 
 
 def spawn_player(board):
