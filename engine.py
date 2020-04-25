@@ -132,6 +132,7 @@ class Key(Entity):
 
 
 class Door(Entity):
+    """Restricts player movement, and can be disabled by collecting keys"""
     def __init__(self, val=0, gridpos=(0,0), color=COLOR.BLACK):
         Entity.__init__(self, gridpos=gridpos, color=color)
 
@@ -149,9 +150,7 @@ class Door(Entity):
 
 
 class Board(Sprite):
-    """
-    Game board that handles drawing entities and tiles. Base class for all levels.
-    """
+    """Game board that handles drawing entities and tiles. Base class for all levels."""
 
     def __init__(self, gridsize=20, color=COLOR.GRAY):
         Sprite.__init__(self)

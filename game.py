@@ -11,6 +11,7 @@ from levels import (SplashScreen, LevelStart, LevelOne,
 
 
 def spawn_player(board):
+    """Deletes the existing player object and spawns a new one on the given board"""
     if State.player:
         State.player.kill()
     if type(board) == EndScreen:
@@ -20,6 +21,7 @@ def spawn_player(board):
 
 
 def main():
+    """Main game loop and event handling"""
     init()
 
     clock = Clock()
